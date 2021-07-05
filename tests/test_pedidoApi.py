@@ -280,7 +280,6 @@ class TestPedidoMethods(unittest.TestCase):
         request_dto.cnpj = self.cnpj
 
         dto = pedidoApi.PedidoApi().postcalcularcarrinho(request_dto)
-
         self.assertIsNotNone(dto)
 
 
