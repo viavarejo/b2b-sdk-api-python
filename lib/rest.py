@@ -2,10 +2,7 @@ import json
 import httplib2
 import sys
 import logging
-
 from urllib.parse import urlparse, parse_qsl, urlunparse, urljoin
-
-from lib.JsonDefaultEncoder import JsonDefaultEncoder
 
 try:
     from multidimensional_urlencode import urlencode
@@ -28,8 +25,8 @@ logger = logging.getLogger(__name__)
 
 
 class sapi(object):
-    baseurl = 'http://api-integracao-extra.hlg-b2b.net'
-    token = 'H9xO4+R8GUy+18nUCgPOlg=='
+    baseurl = 'baseurl'
+    token = 'token'
 
     validmethods = ['GET', 'PUT', 'POST', 'DELETE', 'PATCH']
 
@@ -49,15 +46,12 @@ class sapi(object):
         logger.debug(' * body: {}'.format(json.dumps(data, indent=2)))
 
         if (response['status'] == '404'):
-            # We have the special case that the call was successful,
-            # but no content was submitted, return true
-            return True
+            raise Exception("Status 404 on: " + url)
 
         try:
             data = json.loads(content.decode('utf-8'))
         except:
             if logger.level > logging.DEBUG:
-                # print url even if we are not at debug level because of error
                 logger.info('request: {}'.format(url))
                 logger.info(' * response: {}'.format(response))
                 logger.info(' * content: {}'.format(content))
