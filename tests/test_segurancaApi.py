@@ -1,6 +1,6 @@
 import unittest
 from lib.models.SegurancaDTO import SegurancaDTO
-from lib import segurancaApi
+from lib.api import segurancaApi
 import datetime
 
 

@@ -1,15 +1,12 @@
-import json
 import unittest
 import random
 from typing import Optional
 
-import jsonpickle
-
 import lib.models.request.PedidoCarrinhoDTO
-from lib import pedidoApi
-from lib.Encryptor import Encryptor
+from lib.api import pedidoApi
+from lib.utils.Encryptor import Encryptor
 from lib.models.request.ConfirmacaoReqDTO import ConfirmacaoReqDTO
-from lib.models.request.CriacaoPedidoReqDTO import CriacaoPedidoReqDTO, Endereco, Destinatario, DadosEntrega, PagtosComplementare, DadosCartaoCredito, DadosCartaoCreditoValidacao
+from lib.models.request.CriacaoPedidoReqDTO import CriacaoPedidoReqDTO, Endereco, Destinatario, DadosEntrega
 from lib.models.request.PedidoCarrinhoDTO import PedidoCarrinhoDTO
 from lib.models.response.CalculoCarrinhoDTO import CalculoCarrinhoDTO
 

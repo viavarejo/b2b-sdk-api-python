@@ -1,11 +1,11 @@
 import unittest
-from lib import produtoApi
+from lib.api import produtoApi
 
 
 class TestProdutoMethods(unittest.TestCase):
 
     def test_getdadosproduto_sucess(self):
-        dto = produtoApi.ProdutoApi().getdadosproduto('15','5880205')
+        dto = produtoApi.ProdutoApi().getdadosproduto('15', '5880205')
         print(dto)
         self.assertTrue(dto is not None)
         self.assertEqual(dto.data.imagem,'http://imagens.extra.com.br/Control/ArquivoExibir.aspx?IdArquivo=253172122')
@@ -33,7 +33,7 @@ class TestProdutoMethods(unittest.TestCase):
         self.assertEqual(29.9, dto.data.valorDe)
 
     def test_getdadosproduto_fail(self):
-        dto = produtoApi.ProdutoApi().getdadosproduto('15','595959')
+        dto = produtoApi.ProdutoApi().getdadosproduto('15', '595959')
         print(dto)
         self.assertTrue(dto is not None)
         self.assertEqual(dto.error.code,'ProdutoNaoEncontrado')

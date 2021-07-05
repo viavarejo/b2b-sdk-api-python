@@ -1,5 +1,5 @@
 import unittest
-from lib import campanhaApi
+from lib.api import campanhaApi
 
 
 class TestCampanhaMethods(unittest.TestCase):

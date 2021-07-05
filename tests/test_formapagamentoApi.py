@@ -1,5 +1,5 @@
 import unittest
-from lib import formapagamentoApi
+from lib.api import formapagamentoApi
 
 
 class TestFormaPagamentoMethods(unittest.TestCase):
