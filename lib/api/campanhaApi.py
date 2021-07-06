@@ -1,4 +1,4 @@
-from lib import rest
+from lib.utils import rest
 from lib.models.CampanhasDto import CampanhasDTO, CampanhasDTOfromdict
 from lib.models.FormasPagamentoDTO import FormasPagamentoDTOfromdict, FormasPagamentoDTO
 

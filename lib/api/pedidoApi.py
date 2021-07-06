@@ -1,8 +1,4 @@
-import json
-
-import jsonpickle
-
-from lib import rest
+from lib.utils import rest
 from lib.models.request.ConfirmacaoReqDTO import ConfirmacaoReqDTO, ConfirmacaoReqDTOtodict
 from lib.models.request.CriacaoPedidoReqDTO import CriacaoPedidoReqDTO, CriacaoPedidoReqDTOtodict
 from lib.models.request.PedidoCarrinhoDTO import PedidoCarrinhoDTO, PedidoCarrinhoDTOtodict

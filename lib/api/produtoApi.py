@@ -1,4 +1,4 @@
-from lib import rest
+from lib.utils import rest
 from lib.models.ProdutoDTO import ProdutoDTO, ProdutoDTOfromdict
 from lib.models.ProdutosDTO import ProdutosDTO, ProdutosDTOfromdict
 

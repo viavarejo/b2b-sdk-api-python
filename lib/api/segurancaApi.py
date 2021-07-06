@@ -1,4 +1,4 @@
-from lib import rest
+from lib.utils import rest
 from lib.models.SegurancaDTO import SegurancaDTO, SegurancaDTOfromdict
 
 

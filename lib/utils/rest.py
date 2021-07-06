@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 
 
 class sapi(object):
-    baseurl = 'baseurl'
-    token = 'token'
+    baseurl = 'http://api-integracao-extra.hlg-b2b.net'
+    token = 'H9xO4+R8GUy+18nUCgPOlg=='
 
     validmethods = ['GET', 'PUT', 'POST', 'DELETE', 'PATCH']
 

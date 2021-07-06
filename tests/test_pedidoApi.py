@@ -9,6 +9,7 @@ from lib.models.request.ConfirmacaoReqDTO import ConfirmacaoReqDTO
 from lib.models.request.CriacaoPedidoReqDTO import CriacaoPedidoReqDTO, Endereco, Destinatario, DadosEntrega
 from lib.models.request.PedidoCarrinhoDTO import PedidoCarrinhoDTO
 from lib.models.response.CalculoCarrinhoDTO import CalculoCarrinhoDTO
+from lib.api import segurancaApi
 
 
 class DadosPedidoHelper:
@@ -18,6 +19,7 @@ class DadosPedidoHelper:
     valorFrete: Optional[float] = None
     precoVenda: Optional[float] = None
 
+
 class DadosCartaoHelper:
     nome: Optional[str] = None
     numero: Optional[str] = None
@@ -26,9 +28,7 @@ class DadosCartaoHelper:
     mesValidade: Optional[str] = None
 
 
-
 class TestPedidoMethods(unittest.TestCase):
-
     id_campanha = 5940
     cnpj = '57.822.975/0001-12'
     cep = '01525000'
@@ -62,7 +62,6 @@ class TestPedidoMethods(unittest.TestCase):
         self.pedidoHelper = self.prepara_pedido(dto)
         self.assertTrue(dto.data.produtos[0].valorTotalFrete > 0.0)
 
-
     def postcalcularcarrinho_paracriacaoPedido_2(self):
         produto = lib.models.request.PedidoCarrinhoDTO.Produto()
         produto.codigo = self.id_sku_criacao_pedido_com_cartao
@@ -83,7 +82,6 @@ class TestPedidoMethods(unittest.TestCase):
         self.assertTrue(dto.data.valorTotaldoPedido > 0.0)
         self.assertTrue(dto.data.produtos[0].valorTotalFrete > 0.0)
         self.pedidocom_cartao_helper = self.prepara_pedido(dto)
-
 
     def postcriar_pedido_3(self):
         request_dto = CriacaoPedidoReqDTO()
@@ -169,11 +167,15 @@ class TestPedidoMethods(unittest.TestCase):
 
         dadosEntrega.valorFrete = self.pedidocom_cartao_helper.valorFrete
 
-        dadosCartaoCredito.nome = str(Encryptor().encript('Jose da Silva'), 'utf-8')
-        dadosCartaoCredito.numero = str(Encryptor().encript('5155901222280001'), 'utf-8')
-        dadosCartaoCredito.codigoVerificador = str(Encryptor().encript('1234'), 'utf-8')
-        dadosCartaoCredito.validadeAno = str(Encryptor().encript('2045'), 'utf-8')
-        dadosCartaoCredito.validadeMes = str(Encryptor().encript('12'), 'utf-8')
+        chavedto = segurancaApi.SegurancaApi().getchave()
+        chave = chavedto.data.chavePublica
+        encryptor = Encryptor()
+        encryptor.set_chave(chave)
+        dadosCartaoCredito.nome = str(encryptor.encript('Jose da Silva'), 'utf-8')
+        dadosCartaoCredito.numero = str(encryptor.encript('5155901222280001'), 'utf-8')
+        dadosCartaoCredito.codigoVerificador = str(encryptor.encript('1234'), 'utf-8')
+        dadosCartaoCredito.validadeAno = str(encryptor.encript('2045'), 'utf-8')
+        dadosCartaoCredito.validadeMes = str(encryptor.encript('12'), 'utf-8')
         dadosCartaoCredito.quantidadeParcelas = 1
 
         dadosCartaoCreditoValidacao.nome = 'Jose da Silva'
@@ -241,13 +243,14 @@ class TestPedidoMethods(unittest.TestCase):
         confirmacao.confirmado = True
         print('Request:')
         print(confirmacao)
-        dto = pedidoApi.PedidoApi().patchpedidoscancelamentoconfirmacao(str(self.pedidocom_cartao_helper.idPedido), confirmacao)
+        dto = pedidoApi.PedidoApi().patchpedidoscancelamentoconfirmacao(str(self.pedidocom_cartao_helper.idPedido),
+                                                                        confirmacao)
         print('Response:')
         print(dto)
         self.assertTrue(dto.data.pedidoConfirmado)
 
     def get_dados_pedido_parceiro_7(self):
-        dto = pedidoApi.PedidoApi().getdadospedidoparceiro(idcompra= str(self.pedidoHelper.idPedido),
+        dto = pedidoApi.PedidoApi().getdadospedidoparceiro(idcompra=str(self.pedidoHelper.idPedido),
                                                            cnpj=self.cnpj,
                                                            idcampanha=str(self.id_campanha),
                                                            idpedidoparceiro=str(self.pedidoHelper.idPedidoParceiro),
@@ -270,7 +273,6 @@ class TestPedidoMethods(unittest.TestCase):
                                                            idpedidomktplc=None)
         self.assertEqual('400', dto.error.code)
 
-
     def post_calcularcarrinhoparacriacaopedido_fail_10(self):
         request_dto = CriacaoPedidoReqDTO()
         request_dto.campanha = self.id_campanha
@@ -278,7 +280,6 @@ class TestPedidoMethods(unittest.TestCase):
 
         dto = pedidoApi.PedidoApi().postcalcularcarrinho(request_dto)
         self.assertIsNotNone(dto)
-
 
     def patch_pedidos_fail_11(self):
         confirmacao = ConfirmacaoReqDTO()
@@ -310,10 +311,8 @@ class TestPedidoMethods(unittest.TestCase):
                                                         formato=None)
         self.assertIsNotNone('Response nulo', dto)
 
-
     def post_criar_pedido_fail_14(self):
         dto = pedidoApi.PedidoApi().postCriarPedido(None)
-
 
     def test_postcriar_pedido(self):
         self.calcularcarrinho_paracriarpedido_1()
@@ -331,7 +330,6 @@ class TestPedidoMethods(unittest.TestCase):
         self.get_nota_fiscal_pedido_fail_13()
         self.post_criar_pedido_fail_14()
 
-
     def prepara_pedido(self, calculo: CalculoCarrinhoDTO) -> DadosPedidoHelper:
         helper = DadosPedidoHelper()
         helper.idSku = calculo.data.produtos[0].idSku
@@ -341,4 +339,3 @@ class TestPedidoMethods(unittest.TestCase):
 
     def gera_id_pedido_parceiro(self) -> int:
         return random.randint(0, 65536)
-
