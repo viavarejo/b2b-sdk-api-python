@@ -1,6 +1,6 @@
 
 
-# SDK Java para API B2B
+# SDK Python para API B2B
 
 Provê os componentes para o uso da API B2B, disponibilizado pela VIA, facilitando a integração com as documentações relacionadas:
 
