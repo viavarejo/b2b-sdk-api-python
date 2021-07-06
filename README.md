@@ -24,17 +24,16 @@ A pasta [lib/api] contem os arquivos:
 * produtoApi.py
 * segurancaApi.py
 
-Estas compõe a camada de acesso para os serviços disponibilizados pelo B2B, alguns exemplos de como utiliza-lá estão disponíveis 
+Estas compõe a camada de acesso para os serviços disponibilizados pelo B2B, alguns exemplos de como utiliza-lá estão disponíveis nos testes unitarios
 
 A seguir, são apresentadas as APIs e exemplos com as as principais operações do B2B.
 
 - ## Campanha
     Api Utilizada para operações de campanha
-    | Obtém todas as campanhas vinculadas ao parceiro: |
-    | ------ | 
-    | http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync |
-    | http://api-integracao-pontofrio.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync |
-    | http://api-integracao-extra.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync |
+    ## Obtém todas as campanhas vinculadas ao parceiro: 
+    - http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync 
+    - http://api-integracao-pontofrio.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync 
+    - http://api-integracao-extra.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarCampanhaAsync 
 
     ```python
 	    from lib.api import campanhaApi
@@ -43,11 +42,10 @@ A seguir, são apresentadas as APIs e exemplos com as as principais operações 
     
 	***
     
-    | Obtém todas as opções de pagamento para uma determinada campanha: |
-    | ------ | 
-    | http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#!/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
-    | http://api-integracao-pontofrio.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
-    | http://api-integracao-extra.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
+    ## Obtém todas as opções de pagamento para uma determinada campanha: 
+    - http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#!/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
+    - http://api-integracao-pontofrio.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
+    - http://api-integracao-extra.hlg-b2b.net/swagger/ui/index#/Campanha/Campanha_ListarOpcoesParcelamentoAsync |
     
     ```python
     from lib.api import campanhaApi
