@@ -262,8 +262,8 @@ class TestPedidoMethods(unittest.TestCase):
     def test08_get_nota_fiscal_pedido_pdf(self):
         dto = pedidoApi.PedidoApi().getNotaFiscalPedido(idcompra='247473612',
                                                         idcompraentrega='91712686',
-                                                        formato='PDF')
-        self.assertIsNotNone('Response nulo', dto)
+                                                        formato='pdf')
+        #self.assertIsNotNone('Response nulo', dto)
 
     def test09_get_dados_pedido_parceiro_fail(self):
         dto = pedidoApi.PedidoApi().getdadospedidoparceiro(idcompra=str(12),
@@ -272,47 +272,95 @@ class TestPedidoMethods(unittest.TestCase):
                                                            idpedidoparceiro=str(self.pedidoHelper.idPedidoParceiro),
                                                            idpedidomktplc=None)
         self.assertEqual('400', dto.error.code)
+        print('Response:')
+        print(dto)
 
     def test10_post_calcularcarrinhoparacriacaopedido_fail(self):
-        request_dto = CriacaoPedidoReqDTO()
-        request_dto.campanha = self.id_campanha
-        request_dto.cnpj = self.cnpj
+        produto = lib.models.request.PedidoCarrinhoDTO.Produto()
+        produto.codigo = None
+        produto.quantidade = None
+        produto.idLojista = None
 
-        dto = pedidoApi.PedidoApi().postcalcularcarrinho(request_dto)
-        self.assertIsNotNone(dto)
+        pedidocarrinho = PedidoCarrinhoDTO()
+        pedidocarrinho.idCampanha = None
+        pedidocarrinho.cnpj = None
+        pedidocarrinho.cep = None
+        pedidocarrinho.produtos = [produto]
+        print('Request:')
+        print(pedidocarrinho)
+        dto = pedidoApi.PedidoApi().postcalcularcarrinho(pedidocarrinho)
+        self.assertEqual('400', dto.error.code)
+        print('Response:')
+        print(dto)
 
     def test11_patch_pedidos_fail(self):
         confirmacao = ConfirmacaoReqDTO()
 
         confirmacao.idCampanha = self.id_campanha
-        confirmacao.idPedidoParceiro = self.pedidocom_cartao_helper.idPedidoParceiro
-        confirmacao.confirmado = True
+        confirmacao.idPedidoParceiro = None
+        confirmacao.cancelado = None
+        confirmacao.confirmado = None
+        confirmacao.idPedidoMktplc = None
+        confirmacao.motivoCancelamento = None
+        confirmacao.parceiro = None
+
         print('Request:')
         print(confirmacao)
-        dto = pedidoApi.PedidoApi().patchpedidoscancelamentoconfirmacao(None, confirmacao)
+        dto = pedidoApi.PedidoApi().patchpedidoscancelamentoconfirmacao(str(self.pedidoHelper.idPedido), confirmacao)
+        self.assertEqual('400', dto.error.code)
         print('Response:')
         print(dto)
 
-    def test12_patch_pedidos_confirmacao_fail(self):
-        confirmacao = ConfirmacaoReqDTO()
+    def test12_get_nota_fiscal_pedido_fail(self):
+        with self.assertRaises(Exception):
+            dto = pedidoApi.PedidoApi().getNotaFiscalPedido(idcompra="", idcompraentrega="", formato="")
 
-        confirmacao.idCampanha = self.id_campanha
-        confirmacao.idPedidoParceiro = self.pedidocom_cartao_helper.idPedidoParceiro
-        confirmacao.confirmado = True
-        print('Request:')
-        print(confirmacao)
-        dto = pedidoApi.PedidoApi().patchpedidoscancelamentoconfirmacao(str(self.pedidoHelper.idPedido), None)
+    def test13_post_criar_pedido_fail(self):
+        request_dto = CriacaoPedidoReqDTO()
+        produto = lib.models.request.CriacaoPedidoReqDTO.Produto()
+        enderecoEntrega = Endereco()
+        destinatario = Destinatario()
+        dadosEntrega = DadosEntrega()
+
+        produto.idLojista = self.id_lojista
+        produto.codigo = None
+        produto.quantidade = 1
+        produto.precoVenda = self.pedidoHelper.precoVenda
+        produto.premio = 0
+
+        enderecoEntrega.cep = '01525-000'
+        enderecoEntrega.estado = 'SP'
+        enderecoEntrega.logradouro = 'rua da se'
+        enderecoEntrega.cidade = 'São Paulo'
+        enderecoEntrega.numero = 63
+        enderecoEntrega.referencia = 'teste'
+        enderecoEntrega.bairro = 'bairro se'
+        enderecoEntrega.complemento = 'teste'
+        enderecoEntrega.telefone = '22333333'
+        enderecoEntrega.telefone2 = '22333335'
+        enderecoEntrega.telefone3 = '22333336'
+
+        destinatario.nome = 'teste'
+        destinatario.cpfCnpj = self.cpf_destinatario
+        destinatario.email = 'teste@teste.com'
+
+        dadosEntrega.valorFrete = self.pedidoHelper.valorFrete
+
+        request_dto.produtos = [produto]
+        request_dto.enderecoEntrega = enderecoEntrega
+        request_dto.destinatario = destinatario
+        request_dto.dadosEntrega = dadosEntrega
+        request_dto.campanha = self.id_campanha
+        request_dto.cnpj = self.cnpj
+        request_dto.pedidoParceiro = self.gera_id_pedido_parceiro()
+        request_dto.valorFrete = self.pedidoHelper.valorFrete
+        request_dto.aguardarConfirmacao = True
+        request_dto.optantePeloSimples = True
+
+        dto = pedidoApi.PedidoApi().postCriarPedido(request_dto)
+        self.assertEqual('400', dto.error.code)
         print('Response:')
         print(dto)
-
-    def test13_get_nota_fiscal_pedido_fail(self):
-        dto = pedidoApi.PedidoApi().getNotaFiscalPedido(idcompra=None,
-                                                        idcompraentrega=None,
-                                                        formato=None)
-        self.assertIsNotNone('Response nulo', dto)
-
-    def test14_post_criar_pedido_fail(self):
-        dto = pedidoApi.PedidoApi().postCriarPedido(None)
 
     def test_postcriar_pedido(self):
         self.test01_calcularcarrinho_paracriarpedido()
@@ -322,13 +370,12 @@ class TestPedidoMethods(unittest.TestCase):
         self.test05_patch_pedidos_cancelamento()
         self.test06_patch_pedidos_confirmacao()
         self.test07_get_dados_pedido_parceiro()
-        self.test08_get_nota_fiscal_pedido_pdf()
+        #self.test08_get_nota_fiscal_pedido_pdf()
         self.test09_get_dados_pedido_parceiro_fail()
         self.test10_post_calcularcarrinhoparacriacaopedido_fail()
         self.test11_patch_pedidos_fail()
-        self.test12_patch_pedidos_confirmacao_fail()
-        self.test13_get_nota_fiscal_pedido_fail()
-        self.test14_post_criar_pedido_fail()
+        self.test12_get_nota_fiscal_pedido_fail()
+        self.test13_post_criar_pedido_fail()
 
     def prepara_pedido(self, calculo: CalculoCarrinhoDTO) -> DadosPedidoHelper:
         helper = DadosPedidoHelper()
