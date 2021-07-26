@@ -178,7 +178,7 @@ A seguir, são apresentadas as APIs e exemplos com as as principais operações 
     - http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#!/FormaPagamento/FormaPagamento_ListarOpcoesParcelamentoAsync
     - http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#!/FormaPagamento/FormaPagamento_ListarOpcoesParcelamentoAsync
     - http://api-integracao-casasbahia.hlg-b2b.net/swagger/ui/index#!/FormaPagamento/FormaPagamento_ListarOpcoesParcelamentoAsync
-        ```java
+        ```python
         from lib.api import formapagamentoApi
         dto = formapagamentoApi.FormaPagamentoApi().getopcoesparcelamento("1", "5940", "57.822.975/0001-12", "1000")
         ```

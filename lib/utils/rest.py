@@ -1,8 +1,14 @@
 import json
+import urllib.request
+
 import httplib2
 import sys
+import requests
 import logging
 from urllib.parse import urlparse, parse_qsl, urlunparse, urljoin
+from urllib.request import Request, urlopen
+import urllib3
+import xmltodict
 
 try:
     from multidimensional_urlencode import urlencode
@@ -86,6 +92,11 @@ class sapi(object):
         logger.error(message)
         if (exit):
             sys.exit(1)
+
+    def getFile(self, url):
+        return requests.get(url, allow_redirects=True, headers={'Authorization': self.token, 'Content-Type':'application/json'})
+
+
 
     def buildHttpQuery(self, taxonomy, parameters):
         if taxonomy.startswith('/'):

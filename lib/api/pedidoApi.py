@@ -42,8 +42,17 @@ class PedidoApi:
         dto = ConfirmacaoDTOfromdict(response)
         return dto
 
-    def getNotaFiscalPedido(self, idcompra: str, idcompraentrega: str, formato: str) -> str:
-        response = self.client.get('/pedidos/' + idcompra + '/entregas/' + idcompraentrega + '/nfe/' + formato)
+    def getNotaFiscalPedido(self, idcompra: str, idcompraentrega: str, formato: str):
+        response = self.client.getFile('/pedidos/' + idcompra + '/entregas/' + idcompraentrega + '/nfe/' + formato)
+
+        try:
+            filename = idcompra + "_" + idcompraentrega + "." + formato.lower()
+            file = open(filename, 'wb')
+            file.write(response.content)
+            file.close()
+        except:
+            print("Failed to parse bytes from response to file")
+
         return response
 
     def postCriarPedido(self, pedido: CriacaoPedidoReqDTO) -> CriacaoPedidoDTO:

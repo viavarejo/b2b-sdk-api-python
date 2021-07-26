@@ -263,7 +263,7 @@ class TestPedidoMethods(unittest.TestCase):
         dto = pedidoApi.PedidoApi().getNotaFiscalPedido(idcompra='247473612',
                                                         idcompraentrega='91712686',
                                                         formato='PDF')
-        self.assertIsNotNone('Response nulo', dto)
+        self.assertEqual(200, dto.status_code)
 
     def get_dados_pedido_parceiro_fail_9(self):
         dto = pedidoApi.PedidoApi().getdadospedidoparceiro(idcompra=str(12),
