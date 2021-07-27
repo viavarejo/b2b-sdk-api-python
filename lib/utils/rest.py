@@ -94,6 +94,7 @@ class sapi(object):
             sys.exit(1)
 
     def getFile(self, url):
+        url = self.buildHttpQuery(url, None)
         return requests.get(url, allow_redirects=True, headers={'Authorization': self.token, 'Content-Type':'application/json'})
 
 
