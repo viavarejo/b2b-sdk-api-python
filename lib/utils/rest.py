@@ -5,10 +5,11 @@ import httplib2
 import sys
 import requests
 import logging
+import configparser
 from urllib.parse import urlparse, parse_qsl, urlunparse, urljoin
+import os
 from urllib.request import Request, urlopen
 import urllib3
-import xmltodict
 
 try:
     from multidimensional_urlencode import urlencode
@@ -31,16 +32,22 @@ logger = logging.getLogger(__name__)
 
 
 class sapi(object):
-    baseurl = 'http://api-integracao-extra.hlg-b2b.net'
-    token = 'H9xO4+R8GUy+18nUCgPOlg=='
-
+    baseurl = ''
+    token = ''
     validmethods = ['GET', 'PUT', 'POST', 'DELETE', 'PATCH']
+    config = configparser.ConfigParser()
 
     def __init__(self):
         self.connection = httplib2.Http(disable_ssl_certificate_validation=True)
+        ini_path = os.path.join(os.getcwd(), 'config.ini')
+        self.config.read(ini_path)
+        self.baseurl = self.config.get('BASE', 'baseurl')
+        self.token = self.config.get('BASE', 'token')
+
 
 
     def call(self, taxonomy, method='GET', data={}, parameters={}):
+
         if (method not in self.validmethods):
             self.error('Invalid HTTP-Method ' + str(method), exit=True)
         url = self.buildHttpQuery(taxonomy, parameters)
@@ -94,7 +101,7 @@ class sapi(object):
             sys.exit(1)
 
     def getFile(self, url):
-        url = self.buildHttpQuery(url, None)
+        url = self.buildHttpQuery(url, {})
         return requests.get(url, allow_redirects=True, headers={'Authorization': self.token, 'Content-Type':'application/json'})
 
 

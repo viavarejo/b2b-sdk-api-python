@@ -45,13 +45,14 @@ class PedidoApi:
     def getNotaFiscalPedido(self, idcompra: str, idcompraentrega: str, formato: str):
         response = self.client.getFile('/pedidos/' + idcompra + '/entregas/' + idcompraentrega + '/nfe/' + formato)
 
-        try:
-            filename = idcompra + "_" + idcompraentrega + "." + formato.lower()
-            file = open(filename, 'wb')
-            file.write(response.content)
-            file.close()
-        except:
-            print("Failed to parse bytes from response to file")
+        if response.status_code == 200:
+            try:
+                filename = idcompra + "_" + idcompraentrega + "." + formato.lower()
+                file = open(filename, 'wb')
+                file.write(response.content)
+                file.close()
+            except:
+                print("Failed to parse bytes from response to file")
 
         return response
 
