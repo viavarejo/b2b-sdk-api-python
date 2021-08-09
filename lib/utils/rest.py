@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 class sapi(object):
     baseurl = ''
     token = ''
+    mockurl = ''
     validmethods = ['GET', 'PUT', 'POST', 'DELETE', 'PATCH']
     config = configparser.ConfigParser()
 
@@ -43,6 +44,7 @@ class sapi(object):
         self.config.read(ini_path)
         self.baseurl = self.config.get('BASE', 'baseurl')
         self.token = self.config.get('BASE', 'token')
+        self.mockurl = self.config.get('BASE', 'mockurl')
 
 
 
@@ -100,8 +102,10 @@ class sapi(object):
         if (exit):
             sys.exit(1)
 
-    def getFile(self, url):
-        url = self.buildHttpQuery(url, {})
+    def getFile(self, path):
+        url = self.buildHttpQuery(path, {})
+        if self.mockurl != '':
+            url = self.mockurl + path
         return requests.get(url, allow_redirects=True, headers={'Authorization': self.token, 'Content-Type':'application/json'})
 
 
