@@ -5,3 +5,5 @@ htmlcov/
 .coverage
 
 *.idea
+tests/*.pdf
+tests/*.xml
